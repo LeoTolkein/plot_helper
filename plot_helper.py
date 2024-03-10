@@ -113,6 +113,12 @@ def _axes_plot_helper(some_ax: plt.Axes, some_ax_dict: dict,
             plot_func = some_ax.plot
         elif lineplot_dict["type"] == "scatter":
             plot_func = some_ax.scatter
+        elif lineplot_dict["type"] == "semilogx":
+            plot_func = some_ax.semilogx
+        elif lineplot_dict["type"] == "semilogy":
+            plot_func = some_ax.semilogy
+        elif lineplot_dict["type"] == "loglog":
+            plot_func = some_ax.loglog
 
         if x_data is None:
             if specs is None:
