@@ -1,7 +1,6 @@
 # Plot Helper
 
-A very simple function for creating vertical subplots using list-like style
-structures.
+A very simple function for creating subplots using list-like structures.
 
 ## Motivation
 
@@ -30,12 +29,23 @@ See `plot_helper_example.ipynb` for more detail. Some notes here:
 1. Fontsizes are auto-managed by `matplotlib`.
 1. ...
 
-As I mentioned in previous parts, this script does not care that much about
-the flexibility and customization but focuses on consistency, so the
-constraints above exist.
+As mentioned in previous parts, this script does not care that much about
+the flexibility and customization but focuses on consistency.
 
 ## Misc
 
 You can freely use this code. I don't expect this to be helpful to everyone.
 I probably don't have enough time and effort to maintain the code and answer
 the questions as well.
+
+## History
+
+### 2024/03/12
+
+1. Replace `add_subplot` function with `matplotlib.pyplot.subplots` to create
+   all subplots at once.
+2. Use `getattr` function to support more types of plots.
+3. Use `**kwargs` to support passing all supported keyword arguments of
+   `matplotlib.pyplot.subplots`.
+4. Add support to generating multi-column subplot figures.
+5. Update the `plot_helper_example.ipynb` script accordingly.
