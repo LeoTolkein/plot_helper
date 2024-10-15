@@ -26,7 +26,9 @@ See `plot_helper_example.ipynb` for more detail. Some notes here:
 
 1. Only one left axis is allowed for a single subplot (multiple right axes
    might be defined).
-1. Fontsizes are auto-managed by `matplotlib`.
+1. **New from 10/15/2024** you may now manually specify other keyword
+   arguments for title, xlabel, ylabel and legend. See
+   `plot_helper_example.ipynb` for more detail.
 1. ...
 
 As mentioned in previous parts, this script does not care that much about
@@ -39,6 +41,12 @@ I probably don't have enough time and effort to maintain the code and answer
 the questions as well.
 
 ## History
+
+### 2024/10/15
+
+1. Update `plot_helper.py`: one may now manually specify other keyword
+   arguments for title, xlabel, ylabel and legend.
+2. Update the `plot_helper_example.ipynb` script accordingly.
 
 ### 2024/03/12
 

@@ -157,7 +157,10 @@ def _subplot_helper(
                     ax_right.legend(
                         all_lines_list,
                         all_labels_list,
-                        loc=legend_settings["loc"]
+                        loc=legend_settings["loc"],
+                        **{k:v for k, v in legend_settings.items()
+                        if k not in ["visible","loc",]
+                        },  # * set other parameters of the legend
                     )
             else:
                 ax_right.legend(all_lines_list, all_labels_list)
@@ -168,9 +171,25 @@ def _subplot_helper(
             # * set lim as array-like format
             else: ax_main.set_xlim(xlim_settings)
         xlabel_settings = single_subplot_dict.get("xlabel", None)
-        if xlabel_settings is not None: ax_main.set_xlabel(xlabel_settings)
+        if xlabel_settings is not None: 
+            # * set xlabel using dict (can specify font size etc.)
+            if isinstance(xlabel_settings, dict): 
+                ax_main.set_xlabel(xlabel_settings["text"], 
+                        **{k:v for k, v in xlabel_settings.items()
+                        if k not in ["text",]},
+                    )
+            # * set xlabel using a string
+            else: ax_main.set_xlabel(xlabel_settings)
         title_settings = single_subplot_dict.get("title", None)
-        if title_settings is not None: ax_main.set_title(title_settings)
+        if title_settings is not None: 
+            # * set title using dict
+            if isinstance(title_settings, dict): 
+                ax_main.set_title(title_settings["text"], 
+                            **{k:v for k, v in title_settings.items()
+                            if k not in ["text",]},
+                        )
+            # * set title using a string
+            else: ax_main.set_title(title_settings)
 
 
 def _axes_plot_helper(some_ax: plt.Axes, some_ax_dict: dict, 
@@ -197,7 +216,15 @@ def _axes_plot_helper(some_ax: plt.Axes, some_ax_dict: dict,
             else:
                 plot_func(x_data, lineplot_dict["y"], **specs)
     ylabel_settings = some_ax_dict.get("ylabel", None)
-    if ylabel_settings is not None: some_ax.set_ylabel(ylabel_settings)
+    if ylabel_settings is not None: 
+        # * set ylabel using dict (can specify font size etc.)
+        if isinstance(ylabel_settings, dict): 
+            some_ax.set_ylabel(ylabel_settings["text"], 
+                            **{k:v for k, v in ylabel_settings.items()
+                            if k not in ["text",]},
+                        )
+        # * set ylabel using a string
+        else: some_ax.set_ylabel(ylabel_settings)
 
     ylim_settings = some_ax_dict.get("ylim", None)
     if ylim_settings is not None:
@@ -211,5 +238,9 @@ def _axes_plot_helper(some_ax: plt.Axes, some_ax_dict: dict,
         legend_settings = some_ax_dict.get("legend", None)
         if legend_settings is not None:
             if legend_settings["visible"] == True:
-                some_ax.legend(loc=legend_settings["loc"])
+                some_ax.legend(loc=legend_settings["loc"],
+                    **{k:v for k, v in legend_settings.items()
+                        if k not in ["visible","loc",]
+                        },  # * set other parameters of the legend
+                )
         else: some_ax.legend()
