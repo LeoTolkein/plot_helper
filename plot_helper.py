@@ -4,7 +4,7 @@
 # * This module relies on matplotlib
 
 
-from typing import Tuple, Union
+from typing import Tuple, Union, Optional
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -118,7 +118,7 @@ def single_plotter(plot_settings_list: Union[list, np.ndarray],
 
 def _subplot_helper(
                     ax_main: plt.Axes, 
-                    single_subplot_dict: Union[dict, None], 
+                    single_subplot_dict: Optional[dict], 
                     right_yaxis_interval: float = 0.2, 
                 ) -> None:
     if not single_subplot_dict:
