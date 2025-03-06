@@ -14,6 +14,7 @@ def single_plotter(plot_settings_list: Union[list, np.ndarray],
                 right_yaxis_interval: float = 0.2, 
                 dpi: int = 300,
                 layout: str = "constrained",
+                squeeze: bool = True,
                 **kwargs,
             ) -> Tuple[plt.Figure, np.ndarray]:
     """ Generate a single figure and return the figure and a list containing
@@ -55,6 +56,12 @@ def single_plotter(plot_settings_list: Union[list, np.ndarray],
         `layout`: Same as the matplotlib.pyplot.plot keyword `layout`. By
         default it is set as "constrained" to make elegant figures. 
 
+        `squeeze`: Similar to the matplotlib.pyplot.plot keyword `squeeze`,
+        EXCEPT that when set to True, when there is only one subplot
+        (i.e. ncol=nrow=1), axes will be a 1D array containing 1 axis element,
+        instead of merely an `Axes` object. This is for the convenience of
+        iteration. By default it is set as True.
+
         You may use other keyword arguments supported by `matplotlib.pyplot.plot`
         function, but do NOTE that `figsize` should not be passed
         as the figsize of the whole figure will be determined by the size
@@ -63,15 +70,19 @@ def single_plotter(plot_settings_list: Union[list, np.ndarray],
         Outputs:
         `fig`: the matplotlib.pyplot.Figure object generated.
 
-        `axes`: a 2D np.ndarray containing all axes that defines the
+        `axes`: a np.ndarray containing all axes that defines the
         x-axis of each subplot (i.e. the main axes) will be returned so that
-        one can easily make modifications to the x-axis. This array is
-        essentially the one created by the `matplotlib.pyplot.subplots`
-        function. NOTE that if there is only one subplot (i.e. ncol=nrow=1), 
-        axes will be a 1D array containing 1 axis element, instead of merely
-        an `Axes` object. This is for the convenience of iteration. This
-        behavior is different from both `squeeze = True` and `squeeze = False`
-        in `subplots`.
+        one can easily make modifications to the x-axis.
+
+        The dimension of this array depends on the input `squeeze` and the
+        shape of `plot_settings_list`.
+        
+        This array is essentially the one created by the `matplotlib.pyplot.subplots`
+        function. NOTE that if there is only one subplot (i.e. ncol=nrow=1),
+        and the input `squeeze` is set to True, axes will be a 1D array
+        containing 1 axis element, instead of merely an `Axes` object. This
+        is for the convenience of iteration. This behavior is different from
+        both `squeeze = True` and `squeeze = False` in `subplots`.
         Also note that the additional axes for each subplot will not be
         contained.
     """
@@ -91,14 +102,18 @@ def single_plotter(plot_settings_list: Union[list, np.ndarray],
     # * Create figure with constrained (similar to tight) layout
     fig, axes = plt.subplots(
         nrows=plotsarr.shape[0], ncols=plotsarr.shape[1],
-        squeeze=True,   # * force `squeeze == True` to make axes returned to be
-                        # * 1D when only 1 col or 1 row is present.
+        squeeze=squeeze,
         figsize=(figsizewidth * plotsarr.shape[1], 
                 figsizeheight * plotsarr.shape[0]), 
         dpi=dpi,
         layout=layout,
         **kwargs,
     )
+
+    # * only when ncol == nrow == 1, and squeeze == True, the returned axes
+    # * will be a single axis instead of a 2D array.
+    if plotsarr.shape[0] == 1 and plotsarr.shape[1] == 1 and squeeze:
+        axes = np.array([axes], dtype=object)
 
     # * Plot on each subplot axis
     for idx in range(plotnum):
